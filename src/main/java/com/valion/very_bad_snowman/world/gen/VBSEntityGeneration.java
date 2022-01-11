@@ -14,13 +14,13 @@ import java.util.List;
 
 public class VBSEntityGeneration {
     public static void onEntitySpawn(final BiomeLoadingEvent event) {
-        addEntityToAllBiomesExceptThese(event, RegEntity.BAD_SNOWMAN.get(), 50, 1, 3,
-                Biomes.SNOWY_TAIGA_MOUNTAINS, Biomes.ICE_SPIKES, Biomes.SNOWY_TUNDRA);
+        addEntityToSpecificBiomes(event, RegEntity.BAD_SNOWMAN.get(), 20, 1, 2,
+                Biomes.ICE_SPIKES, Biomes.SNOWY_TUNDRA, Biomes.SNOWY_TAIGA_MOUNTAINS);
     }
 
-    @SafeVarargs
     private static void addEntityToAllBiomesExceptThese(BiomeLoadingEvent event, EntityType<?> type,
                                                         int weight, int minCount, int maxCount, RegistryKey<Biome>... biomes) {
+        // Goes through each entry in the biomes and sees if it matches the current biome we are loading
         boolean isBiomeSelected = Arrays.stream(biomes).map(RegistryKey::getLocation)
                 .map(Object::toString).anyMatch(s -> s.equals(event.getName().toString()));
 
@@ -31,6 +31,7 @@ public class VBSEntityGeneration {
 
     private static void addEntityToSpecificBiomes(BiomeLoadingEvent event, EntityType<?> type,
                                                   int weight, int minCount, int maxCount, RegistryKey<Biome>... biomes) {
+        // Goes through each entry in the biomes and sees if it matches the current biome we are loading
         boolean isBiomeSelected = Arrays.stream(biomes).map(RegistryKey::getLocation)
                 .map(Object::toString).anyMatch(s -> s.equals(event.getName().toString()));
 

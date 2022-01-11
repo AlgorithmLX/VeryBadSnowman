@@ -41,9 +41,9 @@ public class BadSnowman extends VindicatorEntity {
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.func_233666_p_()
-                .createMutableAttribute(Attributes.MAX_HEALTH, 40.0D)
+                .createMutableAttribute(Attributes.MAX_HEALTH, 60.0D)
                 .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.33D)
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 4.0F)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 5.5F)
                 .createMutableAttribute(Attributes.FOLLOW_RANGE, 50.0F)
                 .createMutableAttribute(Attributes.ZOMBIE_SPAWN_REINFORCEMENTS);
     }
