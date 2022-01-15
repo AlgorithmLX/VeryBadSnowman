@@ -14,7 +14,6 @@ public class RegEntity {
     public static DeferredRegister<EntityType<?>> ENTITY_TYPES
             = DeferredRegister.create(ForgeRegistries.ENTITIES, ModId);
 
-
     public static final RegistryObject<EntityType<BadSnowman>> BAD_SNOWMAN =
             ENTITY_TYPES.register("bad_snowman",
                     () -> EntityType.Builder.create(BadSnowman::new,

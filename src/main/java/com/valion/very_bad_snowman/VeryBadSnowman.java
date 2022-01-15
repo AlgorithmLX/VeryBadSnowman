@@ -2,6 +2,7 @@ package com.valion.very_bad_snowman;
 
 import com.valion.very_bad_snowman.entity.RegEntity;
 import com.valion.very_bad_snowman.entity.render.BadSnowmanRender;
+import com.valion.very_bad_snowman.setup.Registration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -23,6 +24,8 @@ public class VeryBadSnowman {
 
     public VeryBadSnowman() {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        Registration.init();
 
         MinecraftForge.EVENT_BUS.register(this);
 

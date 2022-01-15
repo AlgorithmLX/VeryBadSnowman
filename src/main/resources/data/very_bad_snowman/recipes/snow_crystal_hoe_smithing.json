@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smithing",
+  "base": {
+    "item": "minecraft:netherite_hoe"
+  },
+  "addition": {
+    "item": "very_bad_snowman:snow_crystal_ingot"
+  },
+  "result": {
+    "item": "very_bad_snowman:snow_crystal_hoe"
+  }
+}

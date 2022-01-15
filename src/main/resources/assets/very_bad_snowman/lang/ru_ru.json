@@ -1,3 +1,14 @@
 {
-  "entity.very_bad_snowman.bad_snowman": "Плохой Снеговик"
+  "entity.very_bad_snowman.bad_snowman": "Плохой Снеговик",
+  "item.very_bad_snowman.snow_crystal": "Снежный Кристал",
+  "item.very_bad_snowman.snow_crystal_ingot": "Снежно-кристальный Слиток",
+  "item.very_bad_snowman.snow_crystal_helmet": "Снежно-кристальный Шлем",
+  "item.very_bad_snowman.snow_crystal_chestplate": "Снежно-кристальный Нагрудник",
+  "item.very_bad_snowman.snow_crystal_leggings": "Снежно-кристальный Штаны",
+  "item.very_bad_snowman.snow_crystal_boots": "Снежно-кристальный Ботинки",
+  "item.very_bad_snowman.snow_crystal_sword": "Снежно-кристальный Меч",
+  "item.very_bad_snowman.snow_crystal_pickaxe": "Снежно-кристальная Кирка",
+  "item.very_bad_snowman.snow_crystal_axe": "Снежно-кристальный Топор",
+  "item.very_bad_snowman.snow_crystal_shovel": "Снежно-кристальная Лопата",
+  "item.very_bad_snowman.snow_crystal_hoe": "Снежно-кристальная Мотыга"
 }

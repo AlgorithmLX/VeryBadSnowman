@@ -1,3 +1,14 @@
 {
-  "entity.very_bad_snowman.bad_snowman": "Bad Snowman"
+  "entity.very_bad_snowman.bad_snowman": "Bad Snowman",
+  "item.very_bad_snowman.snow_crystal": "Snow Crystal",
+  "item.very_bad_snowman.snow_crystal_ingot": "Snow Crystal Ingot",
+  "item.very_bad_snowman.snow_crystal_helmet": "Snow Crystal Helmet",
+  "item.very_bad_snowman.snow_crystal_chestplate": "Snow Crystal Chestplate",
+  "item.very_bad_snowman.snow_crystal_leggings": "Snow Crystal Leggings",
+  "item.very_bad_snowman.snow_crystal_boots": "Snow Crystal Boots",
+  "item.very_bad_snowman.snow_crystal_sword": "Snow Crystal Sword",
+  "item.very_bad_snowman.snow_crystal_pickaxe": "Snow Crystal Pickaxe",
+  "item.very_bad_snowman.snow_crystal_axe": "Snow Crystal Axe",
+  "item.very_bad_snowman.snow_crystal_shovel": "Snow Crystal Shovel",
+  "item.very_bad_snowman.snow_crystal_hoe": "Snow Crystal Hoe"
 }
