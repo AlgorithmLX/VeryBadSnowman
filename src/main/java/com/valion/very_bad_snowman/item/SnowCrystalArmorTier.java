@@ -1,26 +1,34 @@
 package com.valion.very_bad_snowman.item;
 
+
 import com.valion.very_bad_snowman.setup.Registration;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.LazyValue;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.antlr.v4.runtime.misc.NotNull;
 
-import java.util.function.Supplier;
+public enum SnowCrystalArmorTier implements ArmorMaterial {
+    SNOW_CRYSTAL_ARMOR(
+            "snow_crystal_armor",
+            40,
+            new int[] {
+                    4,
+                    7,
+                    9,
+                    4
+            },
+            16,
+            SoundEvents.ARMOR_EQUIP_DIAMOND,
+            4.5f,
+            2,
+            Ingredient.of(Registration.SNOW_CRYSTAL_INGOT.get())
+           );
 
-import static com.valion.very_bad_snowman.VeryBadSnowman.ModId;
-
-public enum SnowCrystalArmorTier implements IArmorMaterial {
-    SNOW_CRYSTAL_ARMOR("snow_crystal_armor", 40, new int[] { 4, 7, 9, 4 }, 16,
-            SoundEvents.ITEM_ARMOR_EQUIP_IRON, 4.5f, 0.2f, () -> {
-        return Ingredient.fromItems(Registration.SNOW_CRYSTAL_INGOT.get());
-    });
-
-    private static final int[] MAX_DAMAGE_ARRAY = new int[]{13, 15, 16, 11};
+    private static final int[] armorDurability =  new int[]{13, 15, 16, 11};
     private final String name;
     private final int maxDamageFactor;
     private final int[] damageReductionAmountArray;
@@ -28,11 +36,9 @@ public enum SnowCrystalArmorTier implements IArmorMaterial {
     private final SoundEvent soundEvent;
     private final float toughness;
     private final float knockbackResistance;
-    private final LazyValue<Ingredient> repairMaterial;
+    private final Ingredient repairMaterial;;
 
-    private SnowCrystalArmorTier(String name, int maxDamageFactor, int[] damageReductionAmountArray, int enchantability,
-                                 SoundEvent soundEvent, float toughness, float knockbackResistance,
-                                 Supplier<Ingredient> repairMaterial) {
+    SnowCrystalArmorTier(String name, int maxDamageFactor, int[] damageReductionAmountArray, int enchantability, SoundEvent soundEvent, float toughness, float knockbackResistance, Ingredient repairMaterialIn) {
         this.name = name;
         this.maxDamageFactor = maxDamageFactor;
         this.damageReductionAmountArray = damageReductionAmountArray;
@@ -40,33 +46,38 @@ public enum SnowCrystalArmorTier implements IArmorMaterial {
         this.soundEvent = soundEvent;
         this.toughness = toughness;
         this.knockbackResistance = knockbackResistance;
-        this.repairMaterial = new LazyValue<>(repairMaterial);
+        this.repairMaterial = repairMaterialIn;
+
     }
 
-
-    public int getDurability(EquipmentSlotType slotIn) {
-        return MAX_DAMAGE_ARRAY[slotIn.getIndex()] * this.maxDamageFactor;
+    @Override
+    public int getDurabilityForSlot(EquipmentSlot slot) {
+        return armorDurability[slot.getIndex()] * this.maxDamageFactor;
     }
 
-    public int getDamageReductionAmount(EquipmentSlotType slotIn) {
-        return this.damageReductionAmountArray[slotIn.getIndex()];
+    @Override
+    public int getDefenseForSlot(EquipmentSlot slot) {
+        return this.damageReductionAmountArray[slot.getIndex()];
     }
 
-    public int getEnchantability() {
+    @Override
+    public int getEnchantmentValue() {
         return this.enchantability;
     }
 
-    public SoundEvent getSoundEvent() {
+    @Override
+    public @NotNull SoundEvent getEquipSound() {
         return this.soundEvent;
     }
 
-    public Ingredient getRepairMaterial() {
-        return this.repairMaterial.getValue();
+    @Override
+    public @NotNull Ingredient getRepairIngredient() {
+        return this.repairMaterial;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public String getName() {
-        return ModId + ":" + this.name;
+    public @NotNull String getName() {
+        return this.name;
     }
 
     public float getToughness() {

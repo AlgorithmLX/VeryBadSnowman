@@ -1,123 +1,136 @@
 package com.valion.very_bad_snowman.entity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
-import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
-import net.minecraft.entity.monster.VindicatorEntity;
-import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.entity.monster.ZombifiedPiglinEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.passive.SnowGolemEntity;
-import net.minecraft.entity.passive.TurtleEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.SnowballEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.World;
 
-public class BadSnowman extends VindicatorEntity {
+import com.valion.very_bad_snowman.setup.Registration;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.SnowGolem;
+import net.minecraft.world.entity.animal.Turtle;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Vindicator;
+import net.minecraft.world.entity.monster.ZombifiedPiglin;
+import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.MobSpawnSettings;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fmllegacy.network.FMLPlayMessages;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
+import java.util.Set;
 
-    public BadSnowman(EntityType<? extends VindicatorEntity> p_i50189_1_, World p_i50189_2_) {
-        super(p_i50189_1_, p_i50189_2_);
+@Mod.EventBusSubscriber
+public class BadSnowman extends Monster {
+    private static final Set<ResourceLocation> SPAWN_BIOMES = Set.of(new ResourceLocation("snowy_tundra"),
+            new ResourceLocation("snowy_taiga_mountains"), new ResourceLocation("ice_spikes"));
+
+    @SubscribeEvent
+    public static void addLivingEntityToBiomes(BiomeLoadingEvent event) {
+        if (SPAWN_BIOMES.contains(event.getName()))
+            event.getSpawns().getSpawner(MobCategory.MONSTER).add(new MobSpawnSettings.SpawnerData(RegEntity.BAD_SNOWMAN, 50, 1, 4));
     }
 
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return MobEntity.func_233666_p_()
-                .createMutableAttribute(Attributes.MAX_HEALTH, 60.0D)
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.33D)
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 5.5F)
-                .createMutableAttribute(Attributes.FOLLOW_RANGE, 50.0F)
-                .createMutableAttribute(Attributes.ZOMBIE_SPAWN_REINFORCEMENTS);
+    public BadSnowman(FMLPlayMessages.SpawnEntity packet, Level world) {
+        this(RegEntity.BAD_SNOWMAN, world);
+    }
+
+    public BadSnowman(EntityType<? extends Monster> type, Level world) {
+        super(type, world);
+        xpReward = 0;
+        setNoAi(false);
+    }
+
+    public static AttributeSupplier.Builder prepareAttributes() {
+        return LivingEntity.createLivingAttributes()
+                .add(Attributes.MAX_HEALTH, 60.0D)
+                .add(Attributes.MOVEMENT_SPEED, 0.33D)
+                .add(Attributes.ATTACK_DAMAGE, 5.5F)
+                .add(Attributes.FOLLOW_RANGE, 50.0F)
+                .add(Attributes.ATTACK_KNOCKBACK, 2);
     }
 
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal( 1, new NearestAttackableTargetGoal<>( this, PlayerEntity.class, true ) );
-        this.goalSelector.addGoal(7, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setCallsForHelp(ZombifiedPiglinEntity.class));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, SnowGolemEntity.class, true));
-        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, TurtleEntity.class, 10, true, false, TurtleEntity.TARGET_DRY_BABY));
-
-    }
-
-    @Override
-    protected int getExperiencePoints(PlayerEntity player)
-    {
-        return 3 + this.world.rand.nextInt(5);
-    }
-
-    @Override
-    protected SoundEvent getAmbientSound()
-    {
-        return SoundEvents.ENTITY_SNOW_GOLEM_AMBIENT;
+        this.goalSelector.addGoal( 1, new NearestAttackableTargetGoal<>( this, Player.class, true ) );
+        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers(ZombifiedPiglin.class));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true));
+        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Turtle.class, 10, true, false, Turtle.BABY_ON_LAND_SELECTOR));
     }
 
 
     @Override
-    protected SoundEvent getDeathSound()
-    {
-        return SoundEvents.ENTITY_SNOW_GOLEM_DEATH;
+    protected SoundEvent getAmbientSound() {
+        return SoundEvents.SNOW_GOLEM_AMBIENT;
+    }
+
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SoundEvents.SNOW_GOLEM_DEATH;
     }
 
     @Override
-    protected SoundEvent getHurtSound(DamageSource damageSourceIn)
-    {
-        return SoundEvents.ENTITY_SNOW_GOLEM_HURT;
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+        return SoundEvents.SNOW_GOLEM_HURT;
     }
 
     @Override
-    protected void playStepSound(BlockPos pos, BlockState blockIn)
-    {
-        this.playSound(SoundEvents.BLOCK_SNOW_BREAK, 0.20F, 0.5F);
+    protected void playStepSound(BlockPos pos, BlockState blockIn) {
+        this.playSound(SoundEvents.POWDER_SNOW_BREAK, 0.20F, 0.5F);
     }
 
     @Override
-    public boolean attackEntityAsMob(Entity entityIn) {
-        if (!super.attackEntityAsMob(entityIn)) {
+    public MobType getMobType() {
+        return MobType.UNDEAD;
+    }
+
+    @Override
+    public Packet<?> getAddEntityPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
+
+    @Override
+    public boolean doHurtTarget(Entity entityIn) {
+        if (!super.doHurtTarget(entityIn)) {
             return false;
         } else {
             if (entityIn instanceof LivingEntity) {
-                ((LivingEntity)entityIn).addPotionEffect(new EffectInstance(Effects.BLINDNESS, 200,3));
+                ((LivingEntity)entityIn).addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 200, 3));
             }
+
             return true;
         }
     }
 
-    @Override
-    protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
-            this.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(Items.CARVED_PUMPKIN));
 
-    }
-
-    @Override
-    protected void jump() {
-        super.jump();
-    }
-
-    @Override
-    protected boolean isMovementBlocked() {
-        return super.isMovementBlocked();
+    public static void init() {
+        SpawnPlacements.register(RegEntity.BAD_SNOWMAN, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                (entityType, world, reason, pos, random) -> (world.getDifficulty() != Difficulty.PEACEFUL
+                        && Monster.isDarkEnoughToSpawn(world, pos, random) && Mob.checkMobSpawnRules(entityType, world, reason, pos, random)));
     }
 }
+
