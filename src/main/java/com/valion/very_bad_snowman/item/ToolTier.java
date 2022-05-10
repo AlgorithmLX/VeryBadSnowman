@@ -1,10 +1,10 @@
 package com.valion.very_bad_snowman.item;
 
+import javax.annotation.Nonnull;
+
 import com.valion.very_bad_snowman.setup.Registration;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
-import org.antlr.v4.runtime.misc.NotNull;
-
 
 public enum ToolTier implements Tier {
 
@@ -53,7 +53,7 @@ public enum ToolTier implements Tier {
         return this.enchantability;
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public Ingredient getRepairIngredient() {
         return this.repairMaterial;

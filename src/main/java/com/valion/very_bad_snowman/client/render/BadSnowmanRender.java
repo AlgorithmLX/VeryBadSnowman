@@ -1,8 +1,8 @@
-package com.valion.very_bad_snowman.entity.render;
+package com.valion.very_bad_snowman.client.render;
 
 
 import com.valion.very_bad_snowman.entity.BadSnowman;
-import com.valion.very_bad_snowman.entity.model.BadSnowmanModel;
+import com.valion.very_bad_snowman.client.model.BadSnowmanModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;

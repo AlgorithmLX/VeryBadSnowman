@@ -1,6 +1,8 @@
 package com.valion.very_bad_snowman.item;
 
 
+import javax.annotation.Nonnull;
+
 import com.valion.very_bad_snowman.setup.Registration;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -9,7 +11,6 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.antlr.v4.runtime.misc.NotNull;
 
 public enum SnowCrystalArmorTier implements ArmorMaterial {
     SNOW_CRYSTAL_ARMOR(
@@ -66,17 +67,17 @@ public enum SnowCrystalArmorTier implements ArmorMaterial {
     }
 
     @Override
-    public @NotNull SoundEvent getEquipSound() {
+    public @Nonnull SoundEvent getEquipSound() {
         return this.soundEvent;
     }
 
     @Override
-    public @NotNull Ingredient getRepairIngredient() {
+    public @Nonnull Ingredient getRepairIngredient() {
         return this.repairMaterial;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public @NotNull String getName() {
+    public @Nonnull String getName() {
         return this.name;
     }
 
