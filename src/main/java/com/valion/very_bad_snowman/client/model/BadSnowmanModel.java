@@ -1,4 +1,4 @@
-package com.valion.very_bad_snowman.entity.model;
+package com.valion.very_bad_snowman.client.model;
 
 
 import com.valion.very_bad_snowman.entity.BadSnowman;

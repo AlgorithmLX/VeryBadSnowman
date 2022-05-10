@@ -20,9 +20,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.animal.Turtle;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Vindicator;
 import net.minecraft.world.entity.monster.ZombifiedPiglin;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
@@ -46,11 +44,11 @@ public class BadSnowman extends Monster {
     @SubscribeEvent
     public static void addLivingEntityToBiomes(BiomeLoadingEvent event) {
         if (SPAWN_BIOMES.contains(event.getName()))
-            event.getSpawns().getSpawner(MobCategory.MONSTER).add(new MobSpawnSettings.SpawnerData(RegEntity.BAD_SNOWMAN, 50, 1, 4));
+            event.getSpawns().getSpawner(MobCategory.MONSTER).add(new MobSpawnSettings.SpawnerData(Registration.BAD_SNOWMAN.get(), 50, 1, 4));
     }
 
     public BadSnowman(FMLPlayMessages.SpawnEntity packet, Level world) {
-        this(RegEntity.BAD_SNOWMAN, world);
+        this(Registration.BAD_SNOWMAN.get(), world);
     }
 
     public BadSnowman(EntityType<? extends Monster> type, Level world) {
@@ -128,7 +126,7 @@ public class BadSnowman extends Monster {
 
 
     public static void init() {
-        SpawnPlacements.register(RegEntity.BAD_SNOWMAN, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+        SpawnPlacements.register(Registration.BAD_SNOWMAN.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 (entityType, world, reason, pos, random) -> (world.getDifficulty() != Difficulty.PEACEFUL
                         && Monster.isDarkEnoughToSpawn(world, pos, random) && Mob.checkMobSpawnRules(entityType, world, reason, pos, random)));
     }
