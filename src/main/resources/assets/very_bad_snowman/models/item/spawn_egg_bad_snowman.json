@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "very_bad_snowman:item/spawn_egg",
+    "layer1": "very_bad_snowman:item/spawn_egg_overlay"
+  }
+}
