@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "vbs:item/snow_crystal_axe"
+  }
+}

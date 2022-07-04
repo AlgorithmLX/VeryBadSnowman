@@ -1,6 +1,0 @@
-{
-  "parent": "item/handheld",
-  "textures": {
-    "layer0": "very_bad_snowman:item/snow_crystal_shovel"
-  }
-}

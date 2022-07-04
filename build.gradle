@@ -1,26 +1,21 @@
-buildscript {
-    repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-    }
+plugins {
+    id 'net.minecraftforge.gradle' version '5.1.+'
 }
 
-apply plugin: 'net.minecraftforge.gradle'
+String ForgeVersion = "${mc_version}-${forge_version}"
 
 group = 'com.valion'
-version = '1.0.0'
+version = "${mod_version}"
 
 java {
-    archivesBaseName = 'very_bad_snowman'
-    toolchain.languageVersion = JavaLanguageVersion.of(16)
+    archivesBaseName = 'vbs'
+    toolchain.languageVersion = JavaLanguageVersion.of(17)
 }
 
-println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-    mappings channel: 'official', version: '1.17.1'
+    mappings channel: 'official', version: "1.19"
+
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     runs {
         client {
@@ -31,7 +26,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                verybadsnowman {
+                vbs {
                     source sourceSets.main
                 }
             }
@@ -43,9 +38,8 @@ minecraft {
             property 'forge.logging.markers', 'REGISTRIES'
 
             property 'forge.logging.console.level', 'debug'
-
             mods {
-                verybadsnowman {
+                vbs {
                     source sourceSets.main
                 }
             }
@@ -54,12 +48,16 @@ minecraft {
         data {
             workingDirectory project.file('run')
 
-            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
             property 'forge.logging.console.level', 'debug'
-            args '--mod', 'verybadsnowman', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+
+            args '--mod', 'liaveres', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources')
+
+            environment 'target', 'fmluserdevdata'
 
             mods {
-                verybadsnowman {
+                vbs {
                     source sourceSets.main
                 }
             }
@@ -70,21 +68,27 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
+    maven {
+        name = "AlgoMaven"
+        url = 'https://repsy.io/mvn/algorithmlx/algomaven/'
+    }
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.17.1-37.0.104'
-}
+    minecraft "net.minecraftforge:forge:$ForgeVersion"
 
+    implementation fg.deobf("com.algorithmlx:liquid:${mc_version}_${lc_version}")
+
+}
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "verybadsnowman",
-                "Specification-Vendor"    : "_VaLiOn_",
-                "Specification-Version"   : "1",
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : "_VaLiOn_",
+                "Specification-Title": "LiaVeres",
+                "Specification-Vendor": "ExampleDude",
+                "Specification-Version": "1",
+                "Implementation-Title": project.name,
+                "Implementation-Version": project.jar.archiveVersion,
+                "Implementation-Vendor": "ExampleDude",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
